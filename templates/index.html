@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Chatbot</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <h1>DeepSeek Voice Assistant</h1>
+            <p>Chat via text or use your voice!</p>
+        </header>
+
+        <main class="chat-container">
+            <div id="chat-history" class="chat-history">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        Hello! I am your AI assistant powered by DeepSeek. How can I help you today?
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input type="text" id="text-input" placeholder="Type a message or use the mic..." autocomplete="off">
+                    
+                    <div class="mic-wrapper" id="ripple-wrapper">
+                        <button id="mic-btn" class="mic-btn" title="Hold to speak">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button id="send-btn" class="send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+            <div id="status-text" class="status-text">Ready</div>
+        </main>
+    </div>
+
+    <!-- Hidden audio element for TTS -->
+    <audio id="audio-player"></audio>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
