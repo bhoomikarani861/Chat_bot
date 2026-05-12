@@ -67,7 +67,18 @@ def chat():
         import traceback
         traceback.print_exc()
         print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
+        error_message = str(e)
+        status_code = 500
+        
+        # Make the error message more user-friendly
+        if "GITHUB_TOKEN environment variable not set" in error_message:
+            error_message = "I cannot respond because the GITHUB_TOKEN has not been added to the Vercel project's Environment Variables. Please add it and redeploy."
+            status_code = 400
+        elif "401" in error_message or "Unauthorized" in error_message:
+            error_message = "The GITHUB_TOKEN you provided is invalid or expired. Please check your token and update it in Vercel."
+            status_code = 400
+            
+        return jsonify({"error": error_message}), status_code
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
