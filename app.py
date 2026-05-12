@@ -15,15 +15,21 @@ app = Flask(__name__)
 # Configure DeepSeek via Github Models
 endpoint = "https://models.github.ai/inference"
 model_name = "gpt-4o-mini"
-token = os.environ.get("GITHUB_TOKEN")
 
-if not token:
-    raise ValueError("GITHUB_TOKEN environment variable not set. Please add it to your .env file.")
+# Initialize client lazily to prevent Vercel crashes on import if token is missing
+_client = None
 
-client = ChatCompletionsClient(
-    endpoint=endpoint,
-    credential=AzureKeyCredential(token),
-)
+def get_client():
+    global _client
+    if _client is None:
+        token = os.environ.get("GITHUB_TOKEN")
+        if not token:
+            raise ValueError("GITHUB_TOKEN environment variable not set. Please configure it in Vercel settings.")
+        _client = ChatCompletionsClient(
+            endpoint=endpoint,
+            credential=AzureKeyCredential(token),
+        )
+    return _client
 
 @app.route('/')
 def index():
@@ -39,6 +45,7 @@ def chat():
 
     try:
         # Get AI Response
+        client = get_client()
         response = client.complete(
             messages=[
                 SystemMessage(content="You are a helpful, concise AI assistant. You keep your answers relatively short because they will be read aloud."),
